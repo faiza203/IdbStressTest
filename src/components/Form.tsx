@@ -1,5 +1,9 @@
 import { openDB } from "idb";
 
+interface IDBFactory {
+  databases: any;
+}
+
 function Form() {
   return (
     <form onSubmit={handleSubmit}>
@@ -61,7 +65,12 @@ async function handleSubmit(e: any) {
 
 async function handleGetAllDBS() {
   let firstDB = document.querySelector("#firstDB");
+  // 5
   let lastDB = document.querySelector("#lastDB");
+  //10
+  // for (firstDB; firstDB >= lastDB; firstDB++) {
+  //   const db = openDB(`database__${firstDB}`);
+  // }
   const allDBs = await indexedDB.databases();
   console.log(allDBs);
 }
