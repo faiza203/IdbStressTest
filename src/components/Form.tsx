@@ -1,3 +1,5 @@
+import { openDB } from "idb";
+
 function Form() {
   return (
     <form onSubmit={handleSubmit}>
@@ -14,36 +16,53 @@ function Form() {
 "
       ></input>
       <button type="submit">Submit</button>
+      <input
+        type="number"
+        id="firstDB"
+        placeholder=" Enter Start Number of Data Bases
+"
+      ></input>
+      <input
+        type="number"
+        id="lastDB"
+        placeholder=" Enter End Number of Blobs
+"
+      ></input>
+
+      <button type="button" onClick={() => handleGetAllDBS()}>
+        Get DBS
+      </button>
     </form>
   );
 }
 
-function handleSubmit(e: any) {
+async function handleSubmit(e: any) {
   e.preventDefault();
   const dbNo = e.target[0].value;
   const blogNo = e.target[1].value;
   for (let i = 0; i < dbNo; i++) {
-    let openRequest = indexedDB.open(`Database${i + 1}`, 1);
-
-    openRequest.onupgradeneeded = function () {
-      let db = openRequest.result;
-      let store = db.createObjectStore("Blobs", {
-        autoIncrement: true,
-      });
-
-      for (let j = 0; j < blogNo; j++) {
-        const obj = { hello: "world" };
-        const blob: any = new Blob([JSON.stringify(obj, null, 2)], {
-          type: "application/json",
+    let db = await openDB(`Database${i + 1}`, 1, {
+      upgrade(db) {
+        db.createObjectStore("Blobs", {
+          autoIncrement: true,
         });
-        store.put(JSON.parse(blob));
-      }
-    };
-
-    openRequest.onsuccess = function () {
-      console.log("Database is created");
-    };
+      },
+    });
+    for (let j = 0; j < blogNo; j++) {
+      const blob = new Blob(["my Blob"], {
+        type: "text/plain",
+      });
+      await db.put("Blobs", blob);
+      await db.getAllKeys("Blobs");
+    }
+    db.close();
   }
 }
 
+async function handleGetAllDBS() {
+  let firstDB = document.querySelector("#firstDB");
+  let lastDB = document.querySelector("#lastDB");
+  const allDBs = await indexedDB.databases();
+  console.log(allDBs);
+}
 export default Form;

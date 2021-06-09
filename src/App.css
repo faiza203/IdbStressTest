@@ -13,7 +13,7 @@ body {
   color: #fff;
 }
 
-body::before {
+/* body::before {
   content: " ";
   position: absolute;
   top: 0;
@@ -33,7 +33,7 @@ body::after {
   height: 100%;
   background: linear-gradient(#fff, red);
   clip-path: circle(20% at 70% 90%);
-}
+} */
 
 .App {
   backdrop-filter: blur(25px);
