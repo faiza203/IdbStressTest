@@ -1,5 +1,5 @@
 import React from "react";
-import { openDB } from "idb";
+import { deleteDB, openDB } from "idb";
 
 let databases = ["Database1", "Database2"];
 
@@ -28,7 +28,13 @@ function Form() {
       <input
         type="number"
         id="lastDB"
-        placeholder=" Enter End Number of Blobs
+        placeholder=" Enter End Number of Data Bases
+"
+      ></input>
+      <input
+        type="number"
+        id="deleteDB"
+        placeholder=" Enter End Number of Deleteu Data Bases
 "
       ></input>
       <button type="button" onClick={() => handleGetAllDBS()}>
@@ -37,7 +43,9 @@ function Form() {
       <button type="button" onClick={() => handleCloseDB()}>
         Close DBS
       </button>
-
+      <button type="button" onClick={() => handleDeleteDB()}>
+        Delete DBS
+      </button>
       <ul className="databases">
         {databases.map((element, i) => {
           return <li key={i}>{element}</li>;
@@ -81,7 +89,6 @@ async function handleGetAllDBS() {
         return db.name === `Database${i}` ? databases.push(db.name) : null;
       });
     }
-    console.log(databases);
   } else {
     alert(
       `Please Check db Numbers You have total ${allDBs.length} dbs from 0 to ${allDBs.length}`
@@ -92,6 +99,10 @@ async function handleGetAllDBS() {
 async function handleCloseDB() {
   let db = await openDB("Database1");
   db.close();
+}
+async function handleDeleteDB() {
+  let deletingNum = document.querySelector("#deleteDB").value;
+  await deleteDB(`Database${deletingNum}`);
 }
 
 export default Form;
