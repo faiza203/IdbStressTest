@@ -34,6 +34,10 @@ function Form() {
       <button type="button" onClick={() => handleGetAllDBS()}>
         Get DBS
       </button>
+      <button type="button" onClick={() => handleCloseDB()}>
+        Close DBS
+      </button>
+
       <ul className="databases">
         {databases.map((element, i) => {
           return <li key={i}>{element}</li>;
@@ -84,4 +88,10 @@ async function handleGetAllDBS() {
     );
   }
 }
+
+async function handleCloseDB() {
+  let db = await openDB("Database1");
+  db.close();
+}
+
 export default Form;
