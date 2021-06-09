@@ -46,6 +46,9 @@ function Form() {
       <button type="button" onClick={() => handleDeleteDB()}>
         Delete DBS
       </button>
+      <button type="button" onClick={() => handleDeleteAllDBs()}>
+        Delete All DBS
+      </button>
       <ul className="databases">
         {databases.map((element, i) => {
           return <li key={i}>{element}</li>;
@@ -86,6 +89,7 @@ async function handleGetAllDBS() {
   if (firstDB < allDBs.length && allDBs.length >= lastDB && firstDB <= lastDB) {
     for (let i = firstDB; i <= lastDB; i++) {
       allDBs.forEach((db) => {
+          console.log(databases);
         return db.name === `Database${i}` ? databases.push(db.name) : null;
       });
     }
@@ -103,6 +107,12 @@ async function handleCloseDB() {
 async function handleDeleteDB() {
   let deletingNum = document.querySelector("#deleteDB").value;
   await deleteDB(`Database${deletingNum}`);
+}
+async function handleDeleteAllDBs() {
+  const allDBs = await indexedDB.databases();
+  allDBs.forEach((db) => {
+    window.indexedDB.deleteDatabase(db.name);
+  });
 }
 
 export default Form;
